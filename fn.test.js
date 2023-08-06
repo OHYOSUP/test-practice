@@ -93,3 +93,66 @@ test("async await test", async () => {
   const age = await fn.getAge();
   expect(age).toBe(30);
 });
+
+let num = 0;
+// num에 계속 새로운 값이 할당되기 때문에 첫번째 테스트를 제외한 모든 test가 fail된다
+
+// beforeEach = 함수가 실행되기 전 값을 설정
+beforeEach(() => {
+  num = 0;
+});
+// <=>
+// aftereEach(()=>{
+//   num = 0
+// })
+
+test("0더하기 1 은 1이다", () => {
+  num = fn.add(num, 1);
+  expect(num).toBe(1);
+});
+test("0더하기 2 은 2이다", () => {
+  num = fn.add(num, 2);
+  expect(num).toBe(2);
+});
+test("0더하기 3 은 3이다", () => {
+  num = fn.add(num, 3);
+  expect(num).toBe(3);
+});
+
+let user;
+
+// beforeAll, afterAll은 각 테스트마다가 아니라 그 아래의 test 전체를 실행하기 전, 후에만 적용된다
+beforeAll(async () => {
+  user = await fn.connectUserDb();
+});
+
+afterAll(async () => {
+  return (user = await fn.disConnectUserDb());
+});
+
+test("이름은 Mike", () => {
+  expect(user.name).toBe("Mike");
+});
+
+// describe는 관련 작업을 하나로 묶는 것
+// 고로 describe안에 있는 befreAll, afterAll은 descrobe안에서만 유효하다
+describe("Car 관련 작업", () => {
+  let car;
+
+  beforeAll(async () => {
+    car = await fn.connectCarDb();
+  });
+  afterAll(() => {
+    return fn.disConnectCarDb();
+  });
+
+  test("이름은 cls", () => {
+    expect(car.name).toBe("cls");
+  });
+  test("브랜드는 benz", () => {
+    expect(car.brand).toBe("benz");
+  });
+  test("색깔은 black", () => {
+    expect(car.color).toBe("black");
+  });
+});
