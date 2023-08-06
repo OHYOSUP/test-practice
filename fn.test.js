@@ -57,7 +57,33 @@ test("유저 리스트에 Mike가 있나?", () => {
   expect(userList).toContain(user);
 });
 
-test('에러가 나오는가?', ()=>{
-  expect(()=> fn.throwErr()).toThrow('xx')
-})
+test("에러가 나오는가?", () => {
+  expect(() => fn.throwErr()).toThrow("xx");
+});
 
+// 비동기 함수를 테스트할 때에는 done을 인자로 받아서 사용.
+// done이라는 함수가 실행되기 전까지 jest 는 test를 끝내지 않고 기다린다
+test("3초 후에 받아온 이름은 Miike", (done) => {
+  function callback(name) {
+    expect(name).toBe("Mike");
+    done();
+  }
+  fn.getName(callback);
+});
+
+// Promise를 받는 jest는 done이 필요없다, 단 return을 꼭 써줘야 한다
+test("Promise를 받은 jest는 어떨까?", () => {
+  return fn.getAge().then((age) => {
+    expect(age).toBe(31);
+  });
+});
+
+// 더 간단한 버전
+test("Promise를 받은 jest 어떨까?2", () => {
+  return expect(fn.getAge()).resolves.toBe(30);
+});
+
+// reject상황 테스트
+test("Promise를 받은 jest의 reject상황 테스트", () => {
+  return expect(fn.getAgeFailed()).rejects.toMatch('error');
+});
