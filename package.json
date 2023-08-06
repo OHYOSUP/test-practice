@@ -1,0 +1,14 @@
+{
+  "name": "jest_practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fn.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.6.2"
+  }
+}
