@@ -85,5 +85,11 @@ test("Promise를 받은 jest 어떨까?2", () => {
 
 // reject상황 테스트
 test("Promise를 받은 jest의 reject상황 테스트", () => {
-  return expect(fn.getAgeFailed()).rejects.toMatch('error');
+  return expect(fn.getAgeFailed()).rejects.toMatch("error");
+});
+
+// async await
+test("async await test", async () => {
+  const age = await fn.getAge();
+  expect(age).toBe(30);
 });
