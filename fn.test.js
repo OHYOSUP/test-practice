@@ -156,3 +156,89 @@ describe("Car 관련 작업", () => {
     expect(car.color).toBe("black");
   });
 });
+
+const mockFn = jest.fn();
+
+// mockFn();
+// mockFn(1)
+
+// test('이 함수는 2번 호출됩니다', ()=>{
+//   expect(mockFn.mock.calls.length).toBe(2)
+// })
+
+// test('mock함수에 들어갈 첫번째 인자는 1이다.', ()=>{
+//   expect(mockFn.mock.calls[1][0]).toBe(1)
+// })
+
+function forEachAdd1(arr) {
+  arr.forEach((num) => {
+    mockFn(num + 1);
+  });
+}
+
+forEachAdd1([10, 20, 30]);
+
+test("함수는 3번 호출됩니다", () => {
+  expect(mockFn.mock.calls.length).toBe(3);
+});
+
+test("함수를 돌린 값은 11, 21, 31입니다", () => {
+  expect(mockFn.mock.calls[0][0]).toBe(11);
+  expect(mockFn.mock.calls[1][0]).toBe(21);
+  expect(mockFn.mock.calls[2][0]).toBe(31);
+});
+// ===
+
+const mockFnSecond = jest.fn((num) => num + 1);
+
+mockFnSecond(10);
+mockFnSecond(20);
+mockFnSecond(30);
+
+test("함수에 10을 넣은 값은 11이다", () => {
+  expect(mockFnSecond.mock.results[0].value).toBe(11);
+});
+test("함수에 20을 넣은 값은 21이다", () => {
+  expect(mockFnSecond.mock.results[1].value).toBe(21);
+});
+test("함수에 30을 넣은 값은 31이다", () => {
+  expect(mockFnSecond.mock.results[2].value).toBe(31);
+});
+
+const getOddNumberMockFn = jest.fn();
+
+getOddNumberMockFn
+  .mockReturnValueOnce(true)
+  .mockReturnValueOnce(false)
+  .mockReturnValueOnce(true)
+  .mockReturnValueOnce(false)
+  .mockReturnValueOnce(true);
+
+const result = [1, 2, 3, 4, 5].filter((num) => getOddNumberMockFn(num));
+
+test('홀수는 1,2,3', ()=>{
+  expect(result).toStrictEqual([1,3,5])
+})
+
+// mockResolvedValue = 비동기 함수 test
+
+
+const mockFnTest = jest.fn()
+
+mockFnTest(10, 20)
+mockFnTest()
+mockFnTest(30, 40)
+
+
+test('한번 이상 호출', ()=>{
+  expect(mockFnTest).toBeCalled()
+})
+test('정확히 세 번 호출?', ()=>{
+  expect(mockFnTest).toBeCalledTimes(3)
+})
+test('10이랑 20을 전달받은 함수가 있는가', ()=>{
+  expect(mockFnTest).toBeCalledWith(10, 20)
+})
+test('마지막 함수는 30이랑 40을 받았는가?', ()=>{
+  expect(mockFnTest).lastCalledWith(30, 40)
+})
